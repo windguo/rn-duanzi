@@ -65,7 +65,7 @@ export default class Me extends Component {
 
                         </View>
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 17, textAlign: 'center', fontWeight: '300', lineHeight: 43.7, color: 'white' }}>个人中心</Text>
+                    <Text style={{ fontSize: 17, textAlign: 'center', fontWeight: '300', lineHeight: 43.7, color: 'white' }}>我的</Text>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
                     }}>
                         <View style={{ justifyContent: 'center', marginRight: 10, alignItems: 'center', height: 43.7, backgroundColor: 'transparent', width: 20 }}>
@@ -220,20 +220,6 @@ export default class Me extends Component {
         }
         this.props.navigation.navigate('Login', { callBack: this.callBack });
     }
-    clickToPublish = () => {
-        if (!this.state.username) {
-            alert('请登录');
-            return;
-        }
-        this.props.navigation.navigate('Publish');
-    }
-    clickToCollection = () => {
-        if (!this.state.username) {
-            alert('请登录');
-            return;
-        }
-        this.props.navigation.navigate('Collection');
-    }
     quit = () => {
         REMOVE_ITEM(storageKeys.userInfo);
         this.setState({ username: null });
@@ -242,11 +228,40 @@ export default class Me extends Component {
     render() {
         return (
             <ScrollView style={{ flex: 1, backgroundColor: Color.f5f5f5 }}>
+                <TouchableOpacity activeOpacity={1} onPress={() => { this.props.navigation.navigate('LocalTxt'); }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, backgroundColor: 'white', justifyContent: 'space-between' }}>
+                        <View style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
+                            <IconSimple name="doc" size={20} color={Color.FontColor} />
+                            <Text style={{ marginLeft: 10 }}>本地收藏的读故事</Text>
+                        </View>
+                        <IconSimple name="arrow-right" size={18} color={Color.FontColor} style={{ marginRight: 20 }} />
+                    </View>
+                </TouchableOpacity>
+                <View style={{ width: WIDTH, height: 1, backgroundColor: Color.f5f5f5 }} />
+                <TouchableOpacity activeOpacity={1} onPress={() => { this.props.navigation.navigate('LocalMp3'); }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, backgroundColor: 'white', justifyContent: 'space-between' }}>
+                        <View style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
+                            <IconSimple name="music-tone" size={20} color={Color.FontColor} />
+                            <Text style={{ marginLeft: 10 }}>本地收藏的听故事</Text>
+                        </View>
+                        <IconSimple name="arrow-right" size={18} color={Color.FontColor} style={{ marginRight: 20 }} />
+                    </View>
+                </TouchableOpacity>
+                <View style={{ width: WIDTH, height: 1, backgroundColor: Color.f5f5f5 }} />
+                <TouchableOpacity activeOpacity={1} onPress={() => { this.props.navigation.navigate('LocalMp4'); }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, backgroundColor: 'white', justifyContent: 'space-between' }}>
+                        <View style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialIcons name="ondemand-video" size={20} color={Color.FontColor} />
+                            <Text style={{ marginLeft: 10 }}>本地收藏的看故事</Text>
+                        </View>
+                        <IconSimple name="arrow-right" size={18} color={Color.FontColor} style={{ marginRight: 20 }} />
+                    </View>
+                </TouchableOpacity>
                 <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} />
                 <TouchableOpacity activeOpacity={1} onPress={() => { this.pushToWeb('yjfk') }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, backgroundColor: 'white', justifyContent: 'space-between' }}>
                         <View style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
-                            <IconSimple name="question" size={22} color={Color.FontColor} />
+                            <IconSimple name="question" size={20} color={Color.FontColor} />
                             <Text style={{ marginLeft: 10 }}>意见反馈</Text>
                         </View>
                         <IconSimple name="arrow-right" size={18} color={Color.FontColor} style={{ marginRight: 20 }} />
@@ -256,23 +271,12 @@ export default class Me extends Component {
                 <TouchableOpacity activeOpacity={1} onPress={() => { this.pushToWeb('yhsyxy') }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, backgroundColor: 'white', justifyContent: 'space-between' }}>
                         <View style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
-                            <IconSimple name="doc" size={22} color={Color.FontColor} />
+                            <IconSimple name="doc" size={20} color={Color.FontColor} />
                             <Text style={{ marginLeft: 10 }}>用户使用协议</Text>
                         </View>
                         <IconSimple name="arrow-right" size={18} color={Color.FontColor} style={{ marginRight: 20 }} />
                     </View>
                 </TouchableOpacity>
-                <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} />
-                {this.state.username ?
-                    <TouchableOpacity activeOpacity={1} onPress={this.quit}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, backgroundColor: 'white', justifyContent: 'space-between' }}>
-                            <View style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
-                                <IconSimple name="logout" size={22} color={Color.FontColor} />
-                                <Text style={{ marginLeft: 10 }}>退出登录</Text>
-                            </View>
-                            <IconSimple name="arrow-right" size={18} color={Color.FontColor} style={{ marginRight: 20 }} />
-                        </View>
-                    </TouchableOpacity> : <View />}
                 <PureModalUtil
                     visible={this.state.visible}
                     close={this.close}

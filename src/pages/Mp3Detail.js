@@ -44,6 +44,16 @@ export default class MusicPlayer extends Component {
             toValue: 1,
             duration: 6000,
             easing: Easing.inOut(Easing.linear)
+        });
+        this.resuleArray = [];
+        READ_CACHE(storageKeys.localMp3, (res) => {
+            if (res && res.length > 0) {
+                this.flatList && this.flatList.setData(res, 0);
+                this.resuleArray = res;
+            } else {
+                console.log('nothings');
+                this.resuleArray = [];
+            }
         })
     }
 
@@ -96,9 +106,22 @@ export default class MusicPlayer extends Component {
             hideOnPress: true,
             // delay: 100,
         });
-        this.spin()
+        this.spin();
+        this.loadData();
     }
-
+    loadData = async (resolve) => {
+        let url = urlConfig.contentApi + '&id=' + this.props.navigation.state.params.id;
+        console.log('loadUrl', url);
+        let res = await HttpUtil.GET(url);
+        console.log(res);
+        resolve && resolve();
+        if (this.props.index !== 0) { this.isNotfirstFetch = true };
+        let result = res.result ? res.result : [];
+        this.setState({
+            data: result,
+        });
+        console.log('res', res);
+    };
     setDuration(duration) {
         this.setState({
             spinValue: new Animated.Value(1)
@@ -158,9 +181,11 @@ export default class MusicPlayer extends Component {
             if (isInstalled) {
                 if (type === 'Session') {
                     WeChat.shareToSession({
-                        imageUrl: this.state.data && this.state.data.nurl,
+                        title: "【儿童文学分享】",
+                        description: this.props.navigation.state.params.title,
                         type: 'news',
-                        webpageUrl: urlConfig.ShareUrl + this.state.data.classid + '/' + this.state.data.id
+                        webpageUrl: urlConfig.ShareUrl + this.props.navigation.state.params.classid + '/' + this.props.navigation.state.params.id,
+                        thumbImage: this.props.navigation.state.params.titlepic,
                     }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((e) => {
                         if (error.message != -2) {
                             Toast.show(error.message);
@@ -168,9 +193,11 @@ export default class MusicPlayer extends Component {
                     });
                 } else {
                     WeChat.shareToTimeline({
-                        imageUrl: this.state.data && this.state.data.nurl,
+                        title: "【儿童文学分享】" + this.props.navigation.state.params.title,
+                        // description: this.props.navigation.state.params.title,
                         type: 'news',
-                        webpageUrl: urlConfig.ShareUrl + this.state.data.classid + '/' + this.state.data.id
+                        webpageUrl: urlConfig.ShareUrl + this.props.navigation.state.params.classid + '/' + this.props.navigation.state.params.id,
+                        thumbImage: this.props.navigation.state.params.titlepic,
                     }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((error) => {
                         if (error.message != -2) {
                             Toast.show(error.message);
@@ -213,9 +240,11 @@ export default class MusicPlayer extends Component {
                 if (isInstalled) {
                     if (data.wechat === 1) {
                         WeChat.shareToSession({
-                            imageUrl: this.state.data && this.state.data.nurl,
+                            title: "【儿童文学分享】",
+                            description: this.props.navigation.state.params.title,
                             type: 'news',
-                            webpageUrl: urlConfig.ShareUrl + this.state.data.classid + '/' + this.state.data.id
+                            webpageUrl: urlConfig.ShareUrl + this.props.navigation.state.params.classid + '/' + this.props.navigation.state.params.id,
+                            thumbImage: this.props.navigation.state.params.titlepic,
                         }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((error) => {
                             if (error.message != -2) {
                                 Toast.show(error.message);
@@ -223,9 +252,11 @@ export default class MusicPlayer extends Component {
                         });
                     } else if (data.wechat === 2) {
                         WeChat.shareToSession({
-                            imageUrl: this.state.data && this.state.data.nurl,
+                            title: "【儿童文学分享】",
+                            description: this.props.navigation.state.params.title,
                             type: 'news',
-                            webpageUrl: urlConfig.ShareUrl + this.state.data.classid + '/' + this.state.data.id
+                            webpageUrl: urlConfig.ShareUrl + this.props.navigation.state.params.classid + '/' + this.props.navigation.state.params.id,
+                            thumbImage: this.props.navigation.state.params.titlepic,
                         }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((error) => {
                             if (error.message != -2) {
                                 Toast.show(error.message);
@@ -342,10 +373,20 @@ export default class MusicPlayer extends Component {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={{ flexDirection: 'row', marginLeft: 10 }}
+                                onPress={() => { 
+                                    this.clickToFava()
+                                 }}
+                            >
+                                <View style={styles.shareContent}>
+                                    <IconSimple name="folder-alt" size={30} color='#ffffff' />
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ flexDirection: 'row', marginLeft: 10 }}
                                 onPress={() => this.clickToReport()}
                             >
                                 <View style={styles.shareContent}>
-                                    <IconSimple name="exclamation" size={30} color='white' />
+                                    <IconSimple name="exclamation" size={25} color='white' />
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -370,7 +411,7 @@ export default class MusicPlayer extends Component {
     }
 
     clickToReport = () => {
-        let url = urlConfig.ReportURL + '/' + this.state.data.classid + '/' + this.state.data.id;
+        let url = urlConfig.ReportURL + '/' + this.props.navigation.state.params.classid + '/' + this.props.navigation.state.params.id;
         this.props.navigation.navigate('Web', { url: url });
         this.close();
     };
@@ -383,6 +424,28 @@ export default class MusicPlayer extends Component {
         this.setState({ viewRef: findNodeHandle(this.backgroundImage) })
     }
 
+    clickToFava = () => {
+        let resu = {
+            title: this.state.data.title,
+            id: this.state.data.id,
+            classid: this.state.data.classid,
+            nurl: this.state.data.nurl,
+            titlepic: this.state.data.titlepic,
+        };
+        console.log('---===----');
+        console.log(resu);
+        this.resuleArray.push(resu);
+        WRITE_CACHE(storageKeys.localMp3, this.resuleArray);
+        Toast.show('本地收藏【' + this.state.data.title + '】成功,\n请到本地收藏的听故事查看。', {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.CENTER,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            delay: 0,
+        });
+    }
+    
     render() {
         return (
             this.props.navigation.state.params.titlepic ?

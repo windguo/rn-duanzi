@@ -35,6 +35,7 @@ import {
 } from 'react-native';
 import { ifIphoneX } from '../utils/iphoneX';
 import HttpUtil from '../utils/HttpUtil';
+import Toast from 'react-native-root-toast';
 import storageKeys from '../utils/storageKeyValue'
 import IconSimple from 'react-native-vector-icons/SimpleLineIcons';
 import * as WeChat from 'react-native-wechat';
@@ -69,8 +70,17 @@ export  default  class Detail extends Component {
             data: [],
             refreshing: false,
         };
+        this.resuleArray = [];
+        READ_CACHE(storageKeys.localTxt, (res) => {
+            if (res && res.length > 0) {
+                this.flatList && this.flatList.setData(res, 0);
+                this.resuleArray = res;
+            } else {
+                console.log('nothings');
+                this.resuleArray = [];
+            }
+        })
     }
-//this.props.navigation.state.params.data.content && JSON.parse(this.props.navigation.state.params.data.content).content
     componentDidMount() {
         this.loadData();
     }
@@ -94,9 +104,11 @@ export  default  class Detail extends Component {
             if (isInstalled) {
                 if (type === 'Session') {
                     WeChat.shareToSession({
-                        imageUrl: this.state.data && this.state.data.nurl,
+                        title: "【儿童文学分享】",
+                        description: this.props.navigation.state.params.title,
                         type: 'news',
-                        webpageUrl: urlConfig.ShareUrl + this.state.data.classid + '/' + this.state.data.id
+                        webpageUrl: urlConfig.ShareUrl + this.props.navigation.state.params.classid + '/' + this.props.navigation.state.params.id,
+                        thumbImage: urlConfig.thumbImage,
                     }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((e) => {
                         if (error.message != -2) {
                             Toast.show(error.message);
@@ -104,9 +116,11 @@ export  default  class Detail extends Component {
                     });
                 } else {
                     WeChat.shareToTimeline({
-                        imageUrl: this.state.data && this.state.data.nurl,
+                        title: "【儿童文学分享】" + this.props.navigation.state.params.title,
+                        // description: this.props.navigation.state.params.title,
                         type: 'news',
-                        webpageUrl: urlConfig.ShareUrl + this.state.data.classid + '/' + this.state.data.id
+                        webpageUrl: urlConfig.ShareUrl + this.props.navigation.state.params.classid + '/' + this.props.navigation.state.params.id,
+                        thumbImage: urlConfig.thumbImage,
                     }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((error) => {
                         if (error.message != -2) {
                             Toast.show(error.message);
@@ -149,9 +163,11 @@ export  default  class Detail extends Component {
                 if (isInstalled) {
                     if (data.wechat === 1) {
                         WeChat.shareToSession({
-                            imageUrl: this.state.data && this.state.data.nurl,
+                            title: "【儿童文学分享】",
+                            description: this.props.navigation.state.params.title,
                             type: 'news',
-                            webpageUrl: urlConfig.ShareUrl + this.state.data.classid + '/' + this.state.data.id
+                            webpageUrl: urlConfig.ShareUrl + this.props.navigation.state.params.classid + '/' + this.props.navigation.state.params.id,
+                            thumbImage: urlConfig.thumbImage,
                         }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((error) => {
                             if (error.message != -2) {
                                 Toast.show(error.message);
@@ -159,9 +175,11 @@ export  default  class Detail extends Component {
                         });
                     } else if (data.wechat === 2) {
                         WeChat.shareToSession({
-                            imageUrl: this.state.data && this.state.data.nurl,
+                            title: "【儿童文学分享】",
+                            description: this.props.navigation.state.params.title,
                             type: 'news',
-                            webpageUrl: urlConfig.ShareUrl + this.state.data.classid + '/' + this.state.data.id
+                            webpageUrl: urlConfig.ShareUrl + this.props.navigation.state.params.classid + '/' + this.props.navigation.state.params.id,
+                            thumbImage: urlConfig.thumbImage,
                         }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((error) => {
                             if (error.message != -2) {
                                 Toast.show(error.message);
@@ -180,34 +198,63 @@ export  default  class Detail extends Component {
         this.props.navigation.navigate('Web', { url: url });
         this.close();
     }
+    clickToFava = () => {
+        let resu = {
+            title: this.state.data.title,
+            id: this.state.data.id,
+            classid: this.state.data.classid,
+            nurl: this.state.data.nurl,
+            titlepic: this.state.data.titlepic,
+        };
+        this.resuleArray.push(resu);
+        WRITE_CACHE(storageKeys.localTxt, this.resuleArray);
+        Toast.show('本地收藏【' + this.state.data.title + '】成功,\n请到本地收藏的读故事查看。', {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.CENTER,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            delay: 0,
+        });
+    }
     render() {
         return (
             <View>
-                <ScrollView>
+                <View style={{ alignItems: 'center', justifyContent: 'center',paddingTop:20,paddingBottom:20}}>
+                    <Text style={{
+                        fontSize: 18
+                    }}>
+                        {this.state.data.title}
+                    </Text>
+                </View>
+                <ScrollView style={{height:HEIGHT-260,marginBottom:20}}>
                     <View style={{ 
                             padding: 20, 
                             // backgroundColor:'#f8f8f8',
                             marginTop: StyleSheet.hairlineWidth,
                             marginBottom: StyleSheet.hairlineWidth
                             }}>
-                            <Text style={{
-                                fontSize:18,
-                                paddingTop:10,
-                                paddingBottom:10,
-                                color: '#c00'
-                            }}>
-                                {this.state.data.title}
-                            </Text>
                         <HTMLView
                             stylesheet={htmlStyles}
                             value={
                                 this.state.data.newstext ? 
                                 this.state.data.newstext :
-                                'Loading...'
+                                '努力加载中...'
                             }
                         />
                     </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center',marginBottom:20 }}>
+                </ScrollView>
+                <View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+                        <TouchableOpacity
+                            style={{ flexDirection: 'row', marginLeft: 10 }}
+                            onPress={() => this.clickToFava()}
+                        >
+                            <View style={styles.shareContent}>
+                                <IconSimple name="folder-alt" size={40} color='black' />
+                                <Text style={styles.spinnerTitle}>收藏</Text>
+                            </View>
+                        </TouchableOpacity>
                         <TouchableOpacity
                             style={{ flexDirection: 'row', marginLeft: 10 }}
                             onPress={() => this.clickToShare('Session')}
@@ -236,7 +283,7 @@ export  default  class Detail extends Component {
                             </View>
                         </TouchableOpacity>
                     </View>
-                </ScrollView>
+                </View>
             </View>
         );
     }

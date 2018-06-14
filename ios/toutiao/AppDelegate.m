@@ -7,11 +7,13 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
+
 #import "AppDelegate.h"
 #import <RCTJPushModule.h>
 #ifdef NSFoundationVersionNumber_iOS_9_x_Max
 #import <UserNotifications/UserNotifications.h>
 #endif
+
 
 #import <CodePush/CodePush.h>
 #import <React/RCTBundleURLProvider.h>
@@ -19,6 +21,8 @@
 #import <React/RCTLinkingManager.h>
 #import <UMCommon/UMCommon.h>           // 公共组件是所有友盟产品的基础组件，必选
 #import <UMAnalytics/MobClick.h>
+
+#import "Orientation.h"
 
 @implementation AppDelegate
 

@@ -23,7 +23,8 @@ export default urlConfig = {
     // 内容api
     contentApi:'/e/api/ertongwenxue?getJson=content',
 //随机
-    sectionListDataRand:'/e/api/ertongwenxue?getJson=column',
+    sectionListDataMp3:'/e/api/ertongwenxue?getJson=columnMp3',
+    sectionListDataMp4:'/e/api/ertongwenxue?getJson=columnMp4',
     //发布地址
     pubLishUrl:'http://m.jianjie8.com/ertongFromapp',
     //点赞或者踩 {classid:2,id:2,dotop:1,doajax:1,ajaxarea:'diggnum'dotop这个字段 传0 是踩踩 传1是赞}
@@ -38,7 +39,7 @@ export default urlConfig = {
     //更新检测地址
     CheckUpdate:"/e/api/ertongwenxue?getJson=version",
     //分享出去的图片
-    thumbImage: 'http://jianjie8.com/skin/ertong/images/icon_share.png',
+    thumbImage: 'http://www.jianjie8.com/skin/ertong_share.png',
     //复制完跳去详情
      ShareUrl: "http://ertong.jianjie8.com/detail/",
     Search:'/e/api/ertongwenxue/?classid=55&getJson='

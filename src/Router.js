@@ -31,7 +31,11 @@ import Publish from './pages/My/Publish'
 import Collection from './pages/My/Collection'
 import User from './pages/User'
 
-import Creat from './pages/Creat/index';
+import LocalTxt from './pages/LocalTxt'
+import LocalMp3 from './pages/LocalMp3'
+import LocalMp4 from './pages/LocalMp4'
+
+import Creat from './pages/Creat/index'
 import CreatTag from './pages/Creat/creat';
 import Cdetail from './pages/Creat/detail';
 
@@ -82,6 +86,7 @@ const _configureTransition = () => {
 const TabNavigaApp = TabNavigator({
     New: { screen: ScrollTabView },
     Rand: { screen: ScrollTabViewRand },
+    Video: { screen: ScrollTabViewVideo },
     My:{screen: My},
 },{
     lazy: true,
@@ -104,6 +109,9 @@ const NavgationApp = StackNavigator({
     Publish: {screen: Publish},
     Collection: {screen: Collection},
     User: {screen: User},
+    LocalTxt: {screen: LocalTxt},
+    LocalMp3: {screen: LocalMp3},
+    LocalMp4: {screen: LocalMp4},
     CreatTag: {screen: CreatTag},
     SearchTag: {screen: SearchTag},
     Search:{screen:Search},

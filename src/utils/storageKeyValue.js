@@ -8,6 +8,8 @@ const storageKeys = {
         //homeList数据缓存 后面要加上page
         homeList:'homeList',
         userInfo:'userInfo',
-        MyCollectList:'MyCollectList',
+        localTxt:'localTxt',
+        localMp3:'localMp3',
+        localMp4:'localMp4',
     }
 export  default  storageKeys;

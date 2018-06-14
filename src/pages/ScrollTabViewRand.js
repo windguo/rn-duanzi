@@ -34,7 +34,6 @@ import {
     FlatList,
     AppState,
     NetInfo
-
 } from 'react-native';
 import LoadingSpinner from '../components/pull/LoadingSpinner';
 import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view';
@@ -66,11 +65,12 @@ export  default  class ScrollTabView extends Component {
                             <MaterialIcons name="search" size={25} color='#ffffff' />
                         </View>
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 17, textAlign: 'center', lineHeight: 43.7, color: "#ffffff" }}>儿童文学</Text>
+                    <Text style={{ fontSize: 17, textAlign: 'center', lineHeight: 43.7, color: "#ffffff" }}>听故事</Text>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
-                        navigation.state.routes[0].routes[0].params.rightFuc && navigation.state.routes[0].routes[0].params.rightFuc();
+                        navigation.navigate('LocalMp3');
                     }}>
-                        <View style={{ justifyContent: 'center', marginLeft: 10, alignItems: 'center', height: 43.7, width: 20 }}>
+                        <View style={{ justifyContent: 'center', alignItems: 'center', height: 43.7, width: 30, marginRight:10 }}>
+                            <IconSimple name="folder-alt" size={25} color={'#fff'} />
                         </View>
                     </TouchableOpacity>
                 </ImageBackground>
@@ -118,24 +118,14 @@ export  default  class ScrollTabView extends Component {
         }
         SplashScreen.hide();
         this.CodePushSync();
-       // WeChat.registerApp('wxd750cac4fb66b983');
+        // WeChat.registerApp('wx668fbd69c9f15c8b');
         this.props.navigation.setParams({
             rightFuc: () => {
-                let url = '';
-                if (global.activeClassId === '0' || global.activeClassId === '1'){
-                    url = urlConfig.pubLishUrl;
-                }else{
-                    url = urlConfig.pubLishUrl + '/?classid=' + global.activeClassId;
-                }
-                if (global.userInfo){
-                    this.props.navigation.navigate('Web',{url:url});
-                }else{
-                    this.props.navigation.navigate('Login');
-                }
-
+                alert("this.props.navigation.navigate('LocalMp3');");
+                this.props.navigation.navigate('LocalMp3');
             },
             leftFuc: () => {
-                this.props.navigation.navigate('SearchTag');
+                this.props.navigation.navigate('LocalMp3');
             }
         });
         InteractionManager.runAfterInteractions(() => {
@@ -289,8 +279,8 @@ export  default  class ScrollTabView extends Component {
         }
     }
     }
-    const header = {
-        backgroundColor: '#027fff',
+const header = {
+    backgroundColor: '#ff2953',
         ...ifIphoneX({
             paddingTop: 44,
             height: 88

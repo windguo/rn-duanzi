@@ -103,10 +103,10 @@ export default class Home extends Component {
                     if (data.wechat === 1) {
                         WeChat.shareToSession({
                             title: "【儿童文学分享】",
-                            description: this._shareItem && this._shareItem.smalltext.replace(/^(\r\n)|(\n)|(\r)/,""),
+                            description: this._shareItem.title,
                             type: 'news',
                             webpageUrl: urlConfig.ShareUrl + this._shareItem.classid + '/' + this._shareItem.id,
-                            thumbImage: urlConfig.thumbImage,
+                            thumbImage: this._shareItem.titlepic,
                         }).then((message)=>{message.errCode === 0  ? this.ToastShow('分享成功') : this.ToastShow('分享失败')}).catch((error) => {
                             if (error.message != -2) {
                                 Toast.show(error.message);
@@ -114,11 +114,11 @@ export default class Home extends Component {
                         });
                     } else{
                         WeChat.shareToTimeline({
-                            title: "【儿童文学分享】" + this._shareItem && this._shareItem.smalltext.replace(/^(\r\n)|(\n)|(\r)/,""),
-                            description: this._shareItem && this._shareItem.smalltext.replace(/^(\r\n)|(\n)|(\r)/,""),
+                            title: "【儿童文学分享】",
+                            description: this._shareItem.title,
                             type: 'news',
                             webpageUrl: urlConfig.ShareUrl + this._shareItem.classid + '/' + this._shareItem.id,
-                            thumbImage: urlConfig.thumbImage,
+                            thumbImage: this._shareItem.titlepic,
                         }).then((message)=>{message.errCode === 0  ? this.ToastShow('分享成功') : this.ToastShow('分享失败')}).catch((error) => {
                             if (error.message != -2) {
                                 Toast.show(error.message);
@@ -162,21 +162,21 @@ export default class Home extends Component {
                 if (type === 'Session') {
                     WeChat.shareToSession({
                         title: "【儿童文学分享】",
-                        description: this._shareItem && this._shareItem.smalltext.replace(/^(\r\n)|(\n)|(\r)/,""),
+                        description: this._shareItem.title,
                         type: 'news',
                         webpageUrl: urlConfig.ShareUrl + this._shareItem.classid + '/' + this._shareItem.id,
-                        thumbImage: urlConfig.thumbImage,
+                        thumbImage: this._shareItem.titlepic,
                     }).then((message)=>{message.errCode === 0  ? this.ToastShow('分享成功') : this.ToastShow('分享失败')}).catch((e)=>{if (error.message != -2) {
                         Toast.show(error.message);
                     }});
 
                 } else {
                     WeChat.shareToTimeline({
-                        title: "【儿童文学分享】" + this._shareItem && this._shareItem.smalltext.replace(/^(\r\n)|(\n)|(\r)/,""),
-                        description: this._shareItem && this._shareItem.smalltext.replace(/^(\r\n)|(\n)|(\r)/,""),
+                        title: "【儿童文学分享】",
+                        description: this._shareItem.title,
                         type: 'news',
                         webpageUrl: urlConfig.ShareUrl + this._shareItem.classid + '/' + this._shareItem.id,
-                        thumbImage: urlConfig.thumbImage,
+                        thumbImage: this._shareItem.titlepic,
                     }).then((message)=>{message.errCode === 0  ? this.ToastShow('分享成功') : this.ToastShow('分享失败')}).catch((error) => {
                         if (error.message != -2) {
                             Toast.show(error.message);
@@ -274,10 +274,10 @@ export default class Home extends Component {
         }
         switch (this.props.data.classid) {
             case '0':
-                url =  urlConfig.sectionListDataRand + '&classid=' + this.props.data.classid;;
+                url =  urlConfig.sectionListDataMp3 + '&classid=' + this.props.data.classid;;
                 break;
             default:
-                url = this.isNotfirstFetch ?  urlConfig.sectionListDataRand + '&classid=' + this.props.data.classid : urlConfig.sectionListDataRand + '&classid=' + this.props.data.classid;
+                url = this.isNotfirstFetch ?  urlConfig.sectionListDataMp3 + '&classid=' + this.props.data.classid : urlConfig.sectionListDataMp3 + '&classid=' + this.props.data.classid;
         }
         console.log('loadUrl',url);
         let res = await HttpUtil.GET(url);
@@ -393,112 +393,53 @@ export default class Home extends Component {
         }catch (e){}
     }
     
-    renderTextAndImage = (item, index) => {
-        return <View>
-            <View>
-                <Text activeOpacity={0.8} onPress={() => {
-                    this.props.navigation.navigate(
-                        'Mp3Detail', { 
-                            id: item.id,
-                            title: item.title,
-                            titlepic: item.titlepic,
-                            nurl:item.nurl 
-                        });
-                }} style={{ fontSize: 18, paddingBottom: 10 }}>{item.title}</Text>
-            </View>
-            <View style={styles.imgposition}>
-                <View activeOpacity={0.8} onPress={() => {
-                    this.props.navigation.navigate(
-                        'Mp3Detail', {
-                            id: item.id,
-                            title: item.title,
-                            titlepic: item.titlepic,
-                            nurl: item.nurl
-                        });
-                }} >
-                    <Text onPress={() => {
-                        this.props.navigation.navigate(
-                            'Mp3Detail', {
-                                id: item.id,
-                                title: item.title,
-                                titlepic: item.titlepic,
-                                nurl: item.nurl
-                            });
-                    }}>
-                        {item.titlepic ? <ImageProgress
-                            source={{ uri: item.titlepic }}
-                            resizeMode={'cover'}
-                            indicator={Pie}
-                            indicatorProps={{
-                                size: 40,
-                                borderWidth: 0,
-                                color: 'rgba(255, 160, 0, 0.8)',
-                                unfilledColor: 'rgba(200, 200, 200, 0.1)'
-                            }}
-                            style={{ width: WIDTH - 40, height: 100 }} /> : null}
-                    </Text>
-                    <Text style={styles.absoluteView} onPress={() => {
-                        this.props.navigation.navigate(
-                            'Mp3Detail', {
-                                id: item.id,
-                                title: item.title,
-                                titlepic: item.titlepic,
-                                nurl: item.nurl
-                            });
-                    }}>
-                        <MaterialIcons name="play-circle-outline" size={45} color='#fe5f01' />
-                    </Text>
-                </View>
-            </View>
-        </View>
-    }
     _renderItem = ({ item, index }) => {
-        return (
-            <TouchableOpacity activeOpacity={1} onPress={() => {
+        if (item.adType && item.picUrl) {
+            return <TouchableOpacity activeOpacity={1} onPress={() => {
                 this.pushToUrls(item.goUrl)
             }}>
+                <View style={{ backgroundColor: '#fff', flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 15, justifyContent: 'center', alignItems: 'center' }}>
+                    {item.picUrl ? <ImageProgress
+                        source={{ uri: item.picUrl }}
+                        resizeMode={'cover'}
+                        indicator={Pie}
+                        indicatorProps={{
+                            size: 40,
+                            borderWidth: 0,
+                            color: 'rgba(255, 160, 0, 0.8)',
+                            unfilledColor: 'rgba(200, 200, 200, 0.1)'
+                        }}
+                        style={{ width: WIDTH - 40, height: 100 }} /> : null}
+                </View>
+            </TouchableOpacity>
+        }
+        return (
+            <TouchableOpacity activeOpacity={1} onPress={() => {
+                this.props.navigation.navigate(
+                    'Mp3Detail', {
+                        id: item.id,
+                        title: item.title,
+                        titlepic: item.titlepic,
+                        nurl: item.nurl
+                    });
+            }}>
                 <View>
-                    <View style={{ backgroundColor: 'white',marginTop:2, paddingHorizontal: 20, paddingTop: 20 }}>
-                        {this.renderTextAndImage(item, index)}
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                marginBottom: 15,
-                                justifyContent: 'space-between',
-                            }}>
+                    <View style={{ backgroundColor: 'white', paddingHorizontal: 20, paddingTop: 20, paddingBottom: 10 }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                        }}>
                             <View style={{ flexDirection: 'row' }}>
-                                <TouchableOpacity activeOpacity={1}
-                                    onPress={() => {
-                                        this.props.navigation.navigate(
-                                            'Mp3Detail', {
-                                                id: item.id,
-                                                title: item.title,
-                                                titlepic: item.titlepic,
-                                                nurl: item.nurl
-                                            });
-                                    }}
-                                    hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}>
-                                    <Text style={{ color: '#ff5923' }}>立即收听 >></Text>
-                                </TouchableOpacity>
+                                <IconSimple name="music-tone" size={20} color={'grey'} />
+                                <Text activeOpacity={0.8} style={{paddingLeft: 10 }}>{item.title}</Text>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flexDirection: 'row', marginLeft: 10 }}>
-                                    <TouchableOpacity activeOpacity={1} onPress={() => { this.PostThumb(item, 1, index) }} hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}>
-                                        {item.isLike ? <IconSimple name="like" size={15} color='#027fff' /> : <IconSimple name="like" size={15} color='#888' />}
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={{ flexDirection: 'row', marginLeft: 10 }}>
-                                    <TouchableOpacity activeOpacity={1} onPress={() => { this.PostThumb(item, 0, index) }} hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}>
-                                        {item.isUnLike ? <IconSimple name="dislike" size={15} color='#027fff' /> : <IconSimple name="dislike" size={15} color='#888' />}
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={{ flexDirection: 'row', marginLeft: 10 }}>
-                                    <TouchableOpacity activeOpacity={1} onPress={() => { this.show(item) }} hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}>
-                                        <IconSimple name="share" size={15} color='#888' />
-                                    </TouchableOpacity>
-                                </View>
+                                <Text activeOpacity={0.8} style={{ fontSize: 18}}>
+                                    <MaterialIcons name="play-circle-outline" size={30} color='#fe5f01' />
+                                </Text>
                             </View>
                         </View>
+
                     </View>
                 </View>
             </TouchableOpacity>
@@ -520,10 +461,10 @@ export default class Home extends Component {
         }
         switch (this.props.data.classid) {
             case '0':
-                url =  urlConfig.sectionListDataRand + '&classid=' + this.props.data.classid + this.dealWithrequestPage();
+                url =  urlConfig.sectionListDataMp3 + '&classid=' + this.props.data.classid + this.dealWithrequestPage();
                 break;
             default:
-                url = this.isNotfirstFetch ? urlConfig.sectionListDataRand + '&classid=' + this.props.data.classid +  this.dealWithrequestPage():urlConfig.sectionListDataRand + '&classid=' + this.props.data.classid+ this.dealWithrequestPage();
+                url = this.isNotfirstFetch ? urlConfig.sectionListDataMp3 + '&classid=' + this.props.data.classid +  this.dealWithrequestPage():urlConfig.sectionListDataMp3 + '&classid=' + this.props.data.classid+ this.dealWithrequestPage();
 
         }
         let res = await HttpUtil.GET(url);

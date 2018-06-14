@@ -51,6 +51,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import urlConfig  from  '../utils/urlConfig';
 import storageKeys from '../utils/storageKeyValue';
 var DeviceInfo = require('react-native-device-info');
+import Orientation from 'react-native-orientation';
 import JPushModule from 'jpush-react-native';
 import HttpUtil from  '../utils/HttpUtil';
 const NativeVersion = DeviceInfo.getVersion();
@@ -70,11 +71,12 @@ export  default  class ScrollTabView extends Component {
                             <MaterialIcons name="search" size={25} color='#ffffff' />
                         </View>
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 17, textAlign: 'center', lineHeight: 43.7, color:"#ffffff"}}>儿童文学</Text>
+                    <Text style={{ fontSize: 17, textAlign: 'center', lineHeight: 43.7, color: "#ffffff" }}>读故事</Text>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
                         navigation.state.routes[0].routes[0].params.rightFuc && navigation.state.routes[0].routes[0].params.rightFuc();
                     }}>
-                        <View style={{ justifyContent: 'center', marginLeft: 10, alignItems: 'center', height: 43.7, width: 20 }}>
+                        <View style={{ justifyContent: 'center', alignItems: 'center', height: 43.7, width: 30, marginRight: 10 }}>
+                            <IconSimple name="folder-alt" size={25} color={'#fff'} />
                         </View>
                     </TouchableOpacity>
                 </ImageBackground>
@@ -137,6 +139,7 @@ export  default  class ScrollTabView extends Component {
 
     }
     componentDidMount() {
+        Orientation.lockToPortrait();
         this.InitJPush();
         this.readUserCache();
         if (Platform.OS === 'android'){
@@ -147,17 +150,7 @@ export  default  class ScrollTabView extends Component {
         WeChat.registerApp('wx668fbd69c9f15c8b');
         this.props.navigation.setParams({
             rightFuc: () => {
-                let url = '';
-                if (global.activeClassId === '0' || global.activeClassId === '1'){
-                    url = urlConfig.pubLishUrl;
-                }else{
-                    url = urlConfig.pubLishUrl + '/?classid=' + global.activeClassId;
-                }
-                if (global.userInfo){
-                    this.props.navigation.navigate('Web',{url:url});
-                }else{
-                    this.props.navigation.navigate('Login');
-                }
+                this.props.navigation.navigate('LocalTxt');
             },
             leftFuc: () => {
                 this.props.navigation.navigate('SearchTag');
@@ -419,7 +412,7 @@ export  default  class ScrollTabView extends Component {
 
 }
     const header = {
-        backgroundColor: '#eee',
+        backgroundColor: '#ff2953',
         ...ifIphoneX({
             paddingTop: 44,
             height: 88

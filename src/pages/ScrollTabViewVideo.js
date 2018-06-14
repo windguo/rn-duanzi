@@ -66,11 +66,12 @@ export  default  class ScrollTabView extends Component {
                             <MaterialIcons name="search" size={25} color='#ffffff' />
                         </View>
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 17, textAlign: 'center', lineHeight: 43.7, color: "#ffffff" }}>儿童文学</Text>
+                    <Text style={{ fontSize: 17, textAlign: 'center', lineHeight: 43.7, color: "#ffffff" }}>看故事</Text>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
-                        navigation.state.routes[0].routes[0].params.rightFuc && navigation.state.routes[0].routes[0].params.rightFuc();
+                        navigation.navigate('LocalMp4');
                     }}>
-                        <View style={{ justifyContent: 'center', marginLeft: 10, alignItems: 'center', height: 43.7, width: 20 }}>
+                        <View style={{ justifyContent: 'center', marginRight: 10, alignItems: 'center', height: 43.7, width: 30 }}>
+                            <IconSimple name="folder-alt" size={25} color={'#fff'} />
                         </View>
                     </TouchableOpacity>
                 </ImageBackground>
@@ -121,17 +122,7 @@ export  default  class ScrollTabView extends Component {
        // WeChat.registerApp('wxd750cac4fb66b983');
         this.props.navigation.setParams({
             rightFuc: () => {
-                let url = '';
-                if (global.activeClassId === '0' || global.activeClassId === '1'){
-                    url = urlConfig.pubLishUrl;
-                }else{
-                    url = urlConfig.pubLishUrl + '/?classid=' + global.activeClassId;
-                }
-                if (global.userInfo){
-                    this.props.navigation.navigate('Web',{url:url});
-                }else{
-                    this.props.navigation.navigate('Login');
-                }
+                this.props.navigation.navigate('LocalMp4');
 
             },
             leftFuc: () => {
@@ -233,7 +224,7 @@ export  default  class ScrollTabView extends Component {
             })
 
             return <ScrollableTabBar activeTextColor='#fe5f01' underlineStyle={{height: 0,width:0}}
-                                     backgroundColor='white' textStyle={{fontSize: 16, fontWeight:'100'}}
+                backgroundColor='#fdf5ed' textStyle={{fontSize: 16, fontWeight:'100'}}
                                      tabStyle={{paddingLeft: 10, paddingRight: 10}} />;
         }
         pageNumber = (number) => {
@@ -290,7 +281,7 @@ export  default  class ScrollTabView extends Component {
     }
     }
     const header = {
-        backgroundColor: '#C7272F',
+        backgroundColor: '#ff2953',
         ...ifIphoneX({
             paddingTop: 44,
             height: 88
